@@ -34,8 +34,8 @@ fn App() -> Element {
         for ( id,name ) in users.iter().enumerate() {
             div {
                 ol {
-                "{id}",
-                "{name}"
+                " [!] {id}",
+                " [+] {name}"
             }
 
             }
