@@ -8,49 +8,18 @@ fn main() {
 #[component]
 fn App() -> Element {
     rsx! {
-         div {
-            color: "red",
-            "Front end with out Js!",
-            button { "Click me!"}
-        }
-    };
-    rsx! {
-         div {  color: "green", "somethings" }
-        ol {
-            {(0..10).map(|i| rsx!{ "{i} [name]" })}
+        div {
+             id: "title",
+              h1 { "Hot Dog" }
+          }
+        div {
+             id: "dogpic",
+            img { src: "https://images.dog.ceo/breeds/pitbull/dog-3981540_1280.jpg" }
          }
-    };
-    let show_titile = true;
-    let users = vec!["Abeni", "nahom", "nati", "Jemil", "abi"];
-    rsx! {
-        if show_titile {
-            h1 { "Hellow world" }
-        }
-        for item in 0..10 {
-             ol {
-                 "{item}"
-             }
-        }
-        for ( id,name ) in users.iter().enumerate() {
-            div {
-                ol {
-                " [!] {id}",
-                " [+] {name}"
-            }
+         div { id: "buttons",
+             button { id: "save", "Save" }
+             button { id: "skip", "Skip" }
+         }
 
-            }
-        }
     }
 }
-// rsx! {
-//     // Anything that's `Display`
-//     {"Something"}
-//
-//     // Optionals
-//     {show_title.then(|| rsx! { "title!" } )}
-//
-//     // And iterators
-//     ul {
-//         {(0..5).map(|i| rsx! { "{i}" })}
-//     }
-// }
