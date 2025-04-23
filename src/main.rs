@@ -1,6 +1,6 @@
 use dioxus::prelude::*;
-use global_attributes::user_select;
-
+static CSS: Asset = asset!("/assets/main.css");
+static ICON: Asset = asset!("/assets/icon.ico", ImageAssetOptions::new().with_avif());
 fn main() {
     dioxus::launch(App);
 }
@@ -8,13 +8,16 @@ fn main() {
 #[component]
 fn App() -> Element {
     rsx! {
+        document::Stylesheet{ href: CSS }
         div {
              id: "title",
               h1 { "Hot Dog" }
           }
         div {
-             id: "dogpic",
-            img { src: "https://images.dog.ceo/breeds/pitbull/dog-3981540_1280.jpg" }
+
+             id: "dogview",
+            img { src: "https://images.dog.ceo/breeds/pitbull/dog-3981540_1280.jpg"}
+
          }
          div { id: "buttons",
              button { id: "save", "Save" }
