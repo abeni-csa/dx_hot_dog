@@ -4,9 +4,12 @@ static CSS: Asset = asset!("/assets/main.css");
 fn main() {
     dioxus::launch(App);
 }
+#[derive(Clone)]
+struct TitleState(String);
 
 #[component]
 fn App() -> Element {
+    use_context_provider(|| TitleState("HOT DOG".to_string()));
     rsx! {
         document::Stylesheet { href: CSS }
         Title {}
@@ -16,11 +19,9 @@ fn App() -> Element {
 
 #[component]
 fn Title() -> Element {
+    let title = use_context::<TitleState>();
     rsx! {
-     div {
-         id: "title",
-         h1 { "HOT DOG" }
-      }
+        h1 { "{title.0}" }
     }
 }
 #[component]
