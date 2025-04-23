@@ -7,6 +7,16 @@ fn main() {
 #[derive(Clone)]
 struct TitleState(String);
 
+#[derive(Clone, Copy)]
+struct MusicPlayer {
+    song: Signal<String>,
+}
+
+fn use_music_player_provider() {
+    let song = use_signal(|| "Drift Away".to_string());
+    use_context_provider(|| MusicPlayer { song });
+}
+
 #[component]
 fn App() -> Element {
     use_context_provider(|| TitleState("HOT DOG".to_string()));
@@ -14,9 +24,18 @@ fn App() -> Element {
         document::Stylesheet { href: CSS }
         Title {}
         DogView {}
+        Player { }
     }
 }
-
+#[component]
+fn Player() -> Element {
+    rsx! {
+        button {
+            onclick: move |_| consume_context::<MusicPlayer>().song.set("Vienna".to_string()),
+            "Shuffle"
+         }
+    }
+}
 #[component]
 fn Title() -> Element {
     let title = use_context::<TitleState>();
