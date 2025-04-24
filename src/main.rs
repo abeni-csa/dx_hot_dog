@@ -1,17 +1,19 @@
 use dioxus::prelude::*;
+static SONG: GlobalSignal<String> = Signal::global(|| "Drift Away".to_string());
 static CSS: Asset = asset!("/assets/main.css");
-// static ICON: Asset = asset!("/assets/icon.ico", ImageAssetOptions::new().with_avif());
 fn main() {
     dioxus::launch(App);
 }
 #[derive(Clone)]
 struct TitleState(String);
-
-#[derive(Clone, Copy)]
+#[derive(serde::Deserialize)]
+struct DogAPI {
+    message: String,
+}
+#[derive(Copy, Clone)]
 struct MusicPlayer {
     song: Signal<String>,
 }
-
 fn use_music_player_provider() {
     let song = use_signal(|| "Drift Away".to_string());
     use_context_provider(|| MusicPlayer { song });
@@ -30,8 +32,10 @@ fn App() -> Element {
 #[component]
 fn Player() -> Element {
     rsx! {
+        h3 { "Now Playing {SONG} "}
         button {
-            onclick: move |_| consume_context::<MusicPlayer>().song.set("Vienna".to_string()),
+            onclick: move |_| *SONG.write() = "Vienna".to_string(),
+            id: "save",
             "Shuffle"
          }
     }
@@ -45,10 +49,15 @@ fn Title() -> Element {
 }
 #[component]
 fn DogView() -> Element {
-    let mut img_src = use_signal(|| "https://images.dog.ceo/breeds/pitbull/dog-3981540_1280.jpg");
-    let skip = move |env| {};
-    let save = move |env| {
-        img_src.set("https://images.dog.ceo/breeds/briard/n02105251_6984.jpg");
+    let mut img_src = use_signal(|| "".to_string());
+    let save = move |_| async move {
+        let response = reqwest::get("https://dog.ceo/api/breeds/image/random")
+            .await
+            .unwrap()
+            .json::<DogAPI>()
+            .await
+            .unwrap();
+        img_src.set(response.message);
     };
     rsx! {
         div {
@@ -58,8 +67,8 @@ fn DogView() -> Element {
 
          }
          div { id: "buttons",
-             button { onclick:skip, id: "save", "Save" }
-             button { onclick:save, id: "skip", "Skip" }
+             button { onclick:save, id: "save", "Priv" }
+             button { onclick:save, id: "skip", "Next" }
          }
 
     }
