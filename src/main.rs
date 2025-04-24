@@ -30,16 +30,16 @@ fn Title() -> Element {
 }
 #[component]
 fn DogView() -> Element {
-    let mut img_src = use_signal(|| "".to_string());
-    let save = move |_| async move {
-        let response = reqwest::get("https://dog.ceo/api/breeds/image/random")
+    let mut img_src = use_resource(|| async move {
+        reqwest::get("https://dog.ceo/api/breeds/image/random")
             .await
-            .unwrap()
+            .unwarp()
             .json::<DogAPI>()
             .await
-            .unwrap();
-        img_src.set(response.message);
-    };
+            .unwarp()
+            .message
+    });
+
     rsx! {
         div {
 
