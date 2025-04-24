@@ -10,14 +10,6 @@ struct TitleState(String);
 struct DogAPI {
     message: String,
 }
-#[derive(Copy, Clone)]
-struct MusicPlayer {
-    song: Signal<String>,
-}
-fn use_music_player_provider() {
-    let song = use_signal(|| "Drift Away".to_string());
-    use_context_provider(|| MusicPlayer { song });
-}
 
 #[component]
 fn App() -> Element {
@@ -26,20 +18,9 @@ fn App() -> Element {
         document::Stylesheet { href: CSS }
         Title {}
         DogView {}
-        Player { }
     }
 }
-#[component]
-fn Player() -> Element {
-    rsx! {
-        h3 { "Now Playing {SONG} "}
-        button {
-            onclick: move |_| *SONG.write() = "Vienna".to_string(),
-            id: "save",
-            "Shuffle"
-         }
-    }
-}
+
 #[component]
 fn Title() -> Element {
     let title = use_context::<TitleState>();
