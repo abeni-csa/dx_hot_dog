@@ -53,3 +53,7 @@ fn DogView() -> Element {
 
     }
 }
+#[server]
+async fn save_dog(image: String) -> Result<(), ServerFnError> {
+    Ok(())
+}
