@@ -1,5 +1,4 @@
 use dioxus::prelude::*;
-static SONG: GlobalSignal<String> = Signal::global(|| "Drift Away".to_string());
 static CSS: Asset = asset!("/assets/main.css");
 fn main() {
     dioxus::launch(App);
@@ -33,10 +32,10 @@ fn DogView() -> Element {
     let mut img_src = use_resource(|| async move {
         reqwest::get("https://dog.ceo/api/breeds/image/random")
             .await
-            .unwarp()
+            .unwrap()
             .json::<DogAPI>()
             .await
-            .unwarp()
+            .unwrap()
             .message
     });
 
@@ -44,12 +43,12 @@ fn DogView() -> Element {
         div {
 
              id: "dogview",
-            img { src: "{img_src}"}
+            img { src: img_src.cloned().unwrap_or_default() }
 
          }
          div { id: "buttons",
-             button { onclick:save, id: "save", "Priv" }
-             button { onclick:save, id: "skip", "Next" }
+             button { onclick: move |_| img_src.restart(), id: "save", "Priv" }
+             button { onclick: move |_| img_src.restart(), id: "skip", "Next" }
          }
 
     }
